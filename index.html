@@ -1,0 +1,405 @@
+export default function DecorStorefrontPrototype() {
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/TU_WEBAPP_ID/exec";
+  const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/TU_PAYMENT_LINK";
+  const products = [
+    {
+      id: 1,
+      name: "Vela Aromática Minimalista",
+      price: 24,
+      image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=900&q=80",
+      category: "Velas",
+      rating: 4.9,
+      reviews: 18,
+      description:
+        "Vela decorativa con diseño elegante para salas, dormitorios y regalos especiales.",
+      shippingLink: "#",
+      testimonials: [
+        "Hermosa presentación y aroma suave.",
+        "Quedó perfecta en mi living.",
+      ],
+    },
+    {
+      id: 2,
+      name: "Jarrón Cerámico Blanco",
+      price: 32,
+      image: "https://images.unsplash.com/photo-1612196808214-b40f1f5b22d4?auto=format&fit=crop&w=900&q=80",
+      category: "Jarrones",
+      rating: 4.8,
+      reviews: 12,
+      description:
+        "Jarrón pequeño de líneas limpias, ideal para mesas auxiliares o repisas.",
+      shippingLink: "#",
+      testimonials: [
+        "Muy delicado y sofisticado.",
+        "Se ve premium y combina con todo.",
+      ],
+    },
+    {
+      id: 3,
+      name: "Bandeja Decorativa Dorada",
+      price: 29,
+      image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
+      category: "Accesorios",
+      rating: 5.0,
+      reviews: 9,
+      description:
+        "Perfecta para organizar perfumes, velas o pequeños objetos con estilo.",
+      shippingLink: "#",
+      testimonials: [
+        "Le da un toque chic al ambiente.",
+        "La uso en mi tocador y amo cómo se ve.",
+      ],
+    },
+    {
+      id: 4,
+      name: "Maceta Nórdica Compacta",
+      price: 18,
+      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=900&q=80",
+      category: "Macetas",
+      rating: 4.7,
+      reviews: 14,
+      description:
+        "Maceta decorativa pequeña para plantas de interior y rincones con personalidad.",
+      shippingLink: "#",
+      testimonials: [
+        "Ideal para espacios pequeños.",
+        "Muy linda, se nota la calidad.",
+      ],
+    },
+  ];
+
+  const [selected, setSelected] = React.useState(products[0]);
+  const [cart, setCart] = React.useState([]);
+  const [query, setQuery] = React.useState("");
+  const [category, setCategory] = React.useState("Todos");
+  const [customer, setCustomer] = React.useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    notes: "",
+  });
+  const [status, setStatus] = React.useState("");
+
+  const categories = ["Todos", ...new Set(products.map((p) => p.category))];
+
+  const filtered = products.filter((p) => {
+    const byCategory = category === "Todos" || p.category === category;
+    const byQuery = p.name.toLowerCase().includes(query.toLowerCase());
+    return byCategory && byQuery;
+  });
+
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+        );
+      }
+      return [...prev, { ...product, qty: 1 }];
+    });
+  };
+
+  const cartCount = cart.reduce((acc, item) => acc + item.qty, 0);
+  const total = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
+
+  const handleCustomerChange = (e) => {
+    const { name, value } = e.target;
+    setCustomer((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckout = async () => {
+    if (cart.length === 0) {
+      setStatus("Agrega al menos un producto antes de continuar.");
+      return;
+    }
+
+    if (!customer.name || !customer.email) {
+      setStatus("Completa al menos nombre y email para continuar.");
+      return;
+    }
+
+    const orderPayload = {
+      createdAt: new Date().toISOString(),
+      customer,
+      items: cart.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        qty: item.qty,
+        subtotal: item.price * item.qty,
+      })),
+      total,
+      currency: "USD",
+      paymentMethod: "Stripe Payment Link",
+      paymentStatus: "Pendiente",
+    };
+
+    try {
+      setStatus("Guardando pedido...");
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderPayload),
+      });
+
+      localStorage.setItem("decor-last-order", JSON.stringify(orderPayload));
+      setStatus("Pedido registrado. Redirigiendo al pago...");
+      window.location.href = STRIPE_PAYMENT_LINK;
+    } catch (error) {
+      setStatus("Hubo un problema al registrar el pedido. Intenta nuevamente.");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-neutral-50 text-neutral-900">
+      <header className="border-b bg-white/90 backdrop-blur sticky top-0 z-20">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-neutral-500">Tienda online</p>
+            <h1 className="text-2xl md:text-3xl font-semibold">Decoración Pequeña</h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-2 rounded-full border px-4 py-2 bg-neutral-50">
+              <span>🛒</span>
+              <span className="text-sm">{cartCount} productos</span>
+            </div>
+            <button className="rounded-full bg-neutral-900 text-white px-5 py-2.5 text-sm shadow-sm hover:opacity-90 transition">
+              Finalizar compra
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section className="max-w-7xl mx-auto px-6 py-10 md:py-14">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <p className="text-sm uppercase tracking-[0.35em] text-neutral-500 mb-3">Catálogo con estilo</p>
+            <h2 className="text-4xl md:text-6xl font-semibold leading-tight">
+              Vendé productos decorativos con una web clara, elegante y lista para convertir.
+            </h2>
+            <p className="mt-5 text-lg text-neutral-600 max-w-xl">
+              Mostrá fotos, precios, descripciones, reseñas, cálculo de envío y una experiencia de compra simple para tus clientes.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button className="rounded-full bg-neutral-900 text-white px-6 py-3 text-sm shadow hover:opacity-90 transition">
+                Ver productos
+              </button>
+              <button className="rounded-full border px-6 py-3 text-sm bg-white hover:bg-neutral-100 transition">
+                Cómo funciona el envío
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-[2rem] shadow-xl border p-4 md:p-6">
+            <img
+              src={selected.image}
+              alt={selected.name}
+              className="w-full h-[360px] object-cover rounded-[1.5rem]"
+            />
+            <div className="mt-5 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm text-neutral-500">{selected.category}</p>
+                <h3 className="text-2xl font-semibold">{selected.name}</h3>
+                <p className="mt-2 text-neutral-600">{selected.description}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-semibold">USD {selected.price}</p>
+                <p className="text-sm text-amber-600">⭐ {selected.rating} · {selected.reviews} reseñas</p>
+              </div>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button
+                onClick={() => addToCart(selected)}
+                className="rounded-full bg-neutral-900 text-white px-5 py-3 text-sm shadow hover:opacity-90 transition"
+              >
+                Agregar al carrito
+              </button>
+              <a
+                href={selected.shippingLink}
+                className="rounded-full border px-5 py-3 text-sm bg-white hover:bg-neutral-100 transition"
+              >
+                Calcular envío
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-6 pb-8">
+        <div className="bg-white rounded-[2rem] border shadow-sm p-4 md:p-5 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+          <div className="flex-1">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar producto..."
+              className="w-full rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((item) => (
+              <button
+                key={item}
+                onClick={() => setCategory(item)}
+                className={`rounded-full px-4 py-2 text-sm transition ${
+                  category === item
+                    ? "bg-neutral-900 text-white"
+                    : "bg-neutral-100 hover:bg-neutral-200"
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-6 pb-14">
+        <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          {filtered.map((product) => (
+            <article
+              key={product.id}
+              className="bg-white rounded-[2rem] border shadow-sm overflow-hidden hover:shadow-lg transition"
+            >
+              <button onClick={() => setSelected(product)} className="w-full text-left">
+                <img src={product.image} alt={product.name} className="w-full h-64 object-cover" />
+              </button>
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm text-neutral-500">{product.category}</p>
+                    <h3 className="text-lg font-semibold leading-snug">{product.name}</h3>
+                  </div>
+                  <p className="font-semibold">USD {product.price}</p>
+                </div>
+                <p className="mt-3 text-sm text-neutral-600">{product.description}</p>
+                <p className="mt-3 text-sm text-amber-600">⭐ {product.rating} · {product.reviews} reseñas</p>
+                <div className="mt-4 flex gap-2">
+                  <button
+                    onClick={() => setSelected(product)}
+                    className="flex-1 rounded-full border px-4 py-2.5 text-sm hover:bg-neutral-100 transition"
+                  >
+                    Ver más
+                  </button>
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="flex-1 rounded-full bg-neutral-900 text-white px-4 py-2.5 text-sm hover:opacity-90 transition"
+                  >
+                    Comprar
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-6 pb-16">
+        <div className="grid lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-[2rem] border shadow-sm p-6">
+            <p className="text-sm uppercase tracking-[0.35em] text-neutral-500">Reseñas</p>
+            <h3 className="text-2xl font-semibold mt-2">Lo que dicen tus clientes</h3>
+            <div className="mt-5 space-y-4">
+              {selected.testimonials.map((item, index) => (
+                <div key={index} className="rounded-2xl bg-neutral-50 border p-4">
+                  <p className="text-neutral-700">“{item}”</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-neutral-900 text-white rounded-[2rem] shadow-xl p-6">
+            <p className="text-sm uppercase tracking-[0.35em] text-neutral-400">Resumen de compra</p>
+            <h3 className="text-2xl font-semibold mt-2">Tu carrito</h3>
+            <div className="mt-5 space-y-3">
+              {cart.length === 0 ? (
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-4 text-neutral-300">
+                  Aún no agregaste productos.
+                </div>
+              ) : (
+                cart.map((item) => (
+                  <div key={item.id} className="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="font-medium">{item.name}</p>
+                      <p className="text-sm text-neutral-400">Cantidad: {item.qty}</p>
+                    </div>
+                    <p className="font-medium">USD {item.qty * item.price}</p>
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between text-lg">
+              <span>Total</span>
+              <strong>USD {total}</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
+          <div className="bg-white rounded-[2rem] border shadow-sm p-6 md:p-8">
+            <p className="text-sm uppercase tracking-[0.35em] text-neutral-500">Checkout</p>
+            <h3 className="text-3xl font-semibold mt-2">Datos del cliente</h3>
+            <p className="mt-3 text-neutral-600">
+              Al confirmar, registramos el pedido en tu planilla y luego redirigimos al cliente al link de pago de Stripe.
+            </p>
+
+            <div className="mt-6 grid md:grid-cols-2 gap-4">
+              <input name="name" value={customer.name} onChange={handleCustomerChange} placeholder="Nombre completo" className="rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300" />
+              <input name="email" value={customer.email} onChange={handleCustomerChange} placeholder="Email" className="rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300" />
+              <input name="phone" value={customer.phone} onChange={handleCustomerChange} placeholder="Teléfono" className="rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300" />
+              <input name="city" value={customer.city} onChange={handleCustomerChange} placeholder="Ciudad" className="rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300" />
+              <input name="address" value={customer.address} onChange={handleCustomerChange} placeholder="Dirección" className="rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300 md:col-span-2" />
+              <input name="postalCode" value={customer.postalCode} onChange={handleCustomerChange} placeholder="Código postal" className="rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300" />
+              <input name="notes" value={customer.notes} onChange={handleCustomerChange} placeholder="Notas del pedido" className="rounded-2xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-300 md:col-span-2" />
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button onClick={handleCheckout} className="rounded-full bg-neutral-900 text-white px-6 py-3 text-sm shadow hover:opacity-90 transition">
+                Registrar pedido y pagar con Stripe
+              </button>
+              <a href={selected.shippingLink} className="rounded-full border px-6 py-3 text-sm bg-white hover:bg-neutral-100 transition">
+                Calcular envío
+              </a>
+            </div>
+
+            {status && (
+              <div className="mt-4 rounded-2xl bg-neutral-50 border px-4 py-3 text-sm text-neutral-700">
+                {status}
+              </div>
+            )}
+          </div>
+
+          <div className="bg-neutral-50 rounded-[2rem] border p-6 md:p-8">
+            <p className="text-sm uppercase tracking-[0.35em] text-neutral-500">Cómo funcionará</p>
+            <h3 className="text-2xl font-semibold mt-2">Flujo MVP</h3>
+            <div className="mt-5 space-y-4 text-neutral-700">
+              <div className="rounded-2xl bg-white border p-4">
+                1. El cliente arma su carrito en la web.
+              </div>
+              <div className="rounded-2xl bg-white border p-4">
+                2. Completa sus datos de contacto y envío.
+              </div>
+              <div className="rounded-2xl bg-white border p-4">
+                3. El pedido se envía a Google Sheets mediante Apps Script.
+              </div>
+              <div className="rounded-2xl bg-white border p-4">
+                4. El cliente es redirigido al pago en Stripe.
+              </div>
+              <div className="rounded-2xl bg-white border p-4">
+                5. Tú haces el seguimiento del pedido desde la planilla.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
