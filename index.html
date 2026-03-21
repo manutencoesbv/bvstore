@@ -617,6 +617,7 @@
         rating: 4.9,
         reviews: 18,
         description: 'Vela decorativa con diseño elegante para salas, dormitorios y regalos especiales.',
+        stripeLink: 'https://buy.stripe.com/14AbJ19ZFbJT6D3am9gw008',
         testimonials: [
           'Hermosa presentación y aroma suave.',
           'Quedó perfecta en mi living.',
@@ -763,8 +764,8 @@
             <p class="muted">${product.description}</p>
             <div class="stars">⭐ ${product.rating} · ${product.reviews} reseñas</div>
             <div class="actions">
-              <button class="btn btn-secondary" data-action="view">Ver más</button>
-              <button class="btn btn-primary" data-action="buy">Comprar</button>
+            <button class="btn btn-secondary" data-action="view">Ver más</button>
+               <a class="btn btn-primary" href="${product.stripeLink}" style="text-align:center;">Comprar</a>
             </div>
           </div>
         `;
@@ -774,10 +775,6 @@
           renderFeatured();
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
-        article.querySelector('[data-action="buy"]').addEventListener('click', () => addToCart(product.id));
-        productsGridEl.appendChild(article);
-      });
     }
 
     function addToCart(productId) {
