@@ -744,10 +744,11 @@
 
 function renderProducts() {
   productsGridEl.innerHTML = '';
+
   const filtered = getFilteredProducts();
 
-  if (!filtered.length) {
-    productsGridEl.innerHTML = '<div class="card section-box" style="grid-column:1/-1;">No se encontraron productos.</div>';
+  if (!filtered || filtered.length === 0) {
+    productsGridEl.innerHTML = '<p>No se encontraron productos.</p>';
     return;
   }
 
@@ -758,32 +759,28 @@ function renderProducts() {
     article.innerHTML = `
       <img src="${product.image}" alt="${product.name}">
       <div class="card-body">
-        <div class="card-top">
-          <div>
-            <div class="muted">${product.category}</div>
-            <h3>${product.name}</h3>
-          </div>
-          <strong>${formatPrice(product.price)}</strong>
-        </div>
-        <p class="muted">${product.description}</p>
-        <div class="stars">⭐ ${product.rating} · ${product.reviews} reseñas</div>
+        <div class="muted">${product.category}</div>
+        <h3>${product.name}</h3>
+        <p>${formatPrice(product.price)}</p>
+        <p>${product.description}</p>
         <div class="actions">
           <button class="btn btn-secondary" data-action="view">Ver más</button>
-          <a class="btn btn-primary" href="${product.stripeLink}" style="text-align:center; display:inline-flex; align-items:center; justify-content:center;">
-            Comprar
-          </a>
+          <a class="btn btn-primary" href="${product.stripeLink || '#'}">Comprar</a>
         </div>
       </div>
     `;
 
-    article.querySelector('[data-action="view"]').addEventListener('click', () => {
-      selectedProduct = product;
-      renderFeatured();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    const viewBtn = article.querySelector('[data-action="view"]');
+    if (viewBtn) {
+      viewBtn.addEventListener('click', () => {
+        selectedProduct = product;
+        renderFeatured();
+      });
+    }
 
     productsGridEl.appendChild(article);
   });
+}
 }
 
     function addToCart(productId) {
