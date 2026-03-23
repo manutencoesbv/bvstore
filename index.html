@@ -42,44 +42,48 @@
         <button id="backButton" class="back-button" type="button">← Volver a la tienda</button>
 
         <article class="product-detail">
-          <section class="gallery-panel">
-            <div class="carousel">
-              <button id="prevSlide" class="carousel-nav prev" type="button" aria-label="Foto anterior">‹</button>
-              <img id="mainImage" class="main-image" src="" alt="" />
-              <button id="nextSlide" class="carousel-nav next" type="button" aria-label="Foto siguiente">›</button>
-            </div>
-            <div id="thumbnailRow" class="thumbnail-row"></div>
-          </section>
+  <section class="gallery-panel full-width-gallery">
+    <div class="carousel">
+      <button id="prevSlide" class="carousel-nav prev" type="button" aria-label="Foto anterior">‹</button>
+      <img id="mainImage" class="main-image" src="" alt="" />
+      <button id="nextSlide" class="carousel-nav next" type="button" aria-label="Foto siguiente">›</button>
+    </div>
+    <div id="thumbnailRow" class="thumbnail-row"></div>
+  </section>
 
-          <section class="info-panel">
-            <div class="product-meta-top">
-              <span id="detailCategory" class="product-category"></span>
-              <div id="detailRating" class="product-rating"></div>
-            </div>
+  <section class="info-panel full-width-info">
+    <div class="product-meta-top">
+      <span id="detailCategory" class="product-category"></span>
+      <div id="detailRating" class="product-rating"></div>
+    </div>
 
-            <h2 id="detailName" class="product-title"></h2>
-            <p id="detailPrice" class="product-price"></p>
+    <h2 id="detailName" class="product-title"></h2>
+    <p id="detailPrice" class="product-price"></p>
 
-            <div class="cta-row">
-              <a id="buyButton" class="buy-button" href="#" target="_self" rel="noopener">Comprar</a>
-            </div>
+    <div class="cta-row">
+      <a id="buyButton" class="buy-button" href="#" target="_self" rel="noopener">Comprar</a>
+    </div>
 
-            <section class="detail-block">
-              <h3>Descripción</h3>
-              <p id="detailDescription"></p>
-            </section>
+    <section class="detail-block">
+      <h3>Descripción</h3>
+      <p id="detailDescription"></p>
+    </section>
+  </section>
 
-            <section class="detail-block">
-              <h3>Comentarios de compradores</h3>
-              <div id="commentsList" class="comments-list"></div>
-            </section>
+  <section class="info-panel full-width-info">
+    <section class="detail-block">
+      <h3>Comentarios de compradores</h3>
+      <div id="commentsList" class="comments-list"></div>
+    </section>
+  </section>
 
-            <section class="detail-block">
-              <h3>Preguntas frecuentes</h3>
-              <div id="qaList" class="qa-list"></div>
-            </section>
-          </section>
-        </article>
+  <section class="info-panel full-width-info">
+    <section class="detail-block">
+      <h3>Preguntas frecuentes</h3>
+      <div id="qaList" class="qa-list"></div>
+    </section>
+  </section>
+</article>
 
         <footer id="contacto" class="company-footer">
           <h3>Contacto</h3>
