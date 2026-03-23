@@ -249,15 +249,19 @@ input {
 }
 
 .carousel {
-  position: relative;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+  align-items: stretch;
 }
 
 .main-image {
   width: 100%;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 22px;
 }
+
 
 .carousel-nav {
   position: absolute;
@@ -284,9 +288,8 @@ input {
 
 .thumbnail-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 14px;
 }
 
 .thumbnail {
@@ -296,6 +299,7 @@ input {
   cursor: pointer;
   background: none;
   padding: 0;
+  height: 100%;
 }
 
 .thumbnail.active {
@@ -304,7 +308,7 @@ input {
 
 .thumbnail img {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -526,4 +530,20 @@ input {
     flex-direction: column;
     align-items: flex-start;
   }
+  @media (max-width: 768px) {
+
+  .carousel {
+    grid-template-columns: 1fr;
+  }
+
+  .main-image {
+    aspect-ratio: 1 / 1;
+  }
+
+  .thumbnail-row {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: none;
+  }
+
+}
 }
