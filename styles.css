@@ -312,7 +312,12 @@ input {
   background: none;
   padding: 0;
   width: 100%;
+} 
+.thumbnail:hover {
+  transform: scale(1.03);
+  transition: 0.2s;
 }
+
 
 .thumbnail img {
   width: 100%;
