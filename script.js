@@ -338,7 +338,7 @@ function renderCatalog(productsToRender) {
 function renderThumbnails() {
   thumbnailRow.innerHTML = '';
 
-  selectedProduct.images.forEach((image, index) => {
+  selectedProduct.images.slice(0, 3).forEach((image, index) => {
     const button = document.createElement('button');
     button.className = `thumbnail ${index === currentImageIndex ? 'active' : ''}`;
     button.type = 'button';
