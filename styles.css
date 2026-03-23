@@ -220,14 +220,15 @@ input {
 
 .product-detail {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 28px;
+  grid-template-columns: 1fr;
+  gap: 22px;
   align-items: start;
 }
 
 .gallery-panel,
 .info-panel,
 .company-footer {
+  width: 100%;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
@@ -238,13 +239,22 @@ input {
   padding: 18px;
 }
 
+.full-width-gallery,
+.full-width-info {
+  width: 100%;
+}
+
+.full-width-info {
+  padding: 28px;
+}
+
 .carousel {
   position: relative;
 }
 
 .main-image {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 16 / 7;
   object-fit: cover;
   border-radius: 22px;
 }
@@ -360,7 +370,7 @@ input {
 }
 
 .detail-block h3 {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   font-size: 24px;
 }
 
@@ -374,10 +384,12 @@ input {
 .qa-list {
   display: grid;
   gap: 14px;
+  width: 100%;
 }
 
 .comment-card,
 .qa-card {
+  width: 100%;
   border: 1px solid var(--line);
   border-radius: 20px;
   background: #fff;
@@ -426,7 +438,8 @@ input {
 }
 
 .company-footer {
-  margin-top: 28px;
+  width: 100%;
+  margin-top: 0;
   padding: 24px 28px;
 }
 
@@ -457,8 +470,8 @@ input {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .product-detail {
-    grid-template-columns: 1fr;
+  .main-image {
+    aspect-ratio: 16 / 9;
   }
 }
 
@@ -478,11 +491,39 @@ input {
 
   .info-panel,
   .gallery-panel,
-  .company-footer {
+  .company-footer,
+  .full-width-info {
     padding: 18px;
+  }
+
+  .main-image {
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
   }
 
   .thumbnail-row {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .product-title {
+    font-size: 28px;
+  }
+
+  .product-price {
+    font-size: 24px;
+  }
+
+  .cta-row {
+    flex-direction: column;
+  }
+
+  .buy-button {
+    width: 100%;
+  }
+
+  .product-meta-top {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
