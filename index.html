@@ -9,87 +9,102 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="#">
-        <img src="Logo3.png" alt="BU Store" class="brand-logo" />
+      <a href="#" class="brand" aria-label="BV Store">
+        <img src="Logo3.png" alt="BV Store" class="brand-logo" />
       </a>
 
       <div class="header-actions">
-        <button class="icon-button" aria-label="Buscar">⌕</button>
-        <button class="icon-button" aria-label="Carrito">🛒</button>
+        <button class="icon-btn" type="button" aria-label="Buscar">⌕</button>
+        <button class="icon-btn" type="button" aria-label="Carrinho">🛒</button>
       </div>
     </div>
   </header>
 
   <main>
+    <!-- HOME -->
     <section id="homeView" class="view active">
       <div class="container">
-        <section class="hero-section">
+        <section class="hero">
           <div class="hero-copy">
             <h1>Seu lar, mais leve, organizado e acolhedor</h1>
-            <p>Peças funcionais e minimalistas para transformar seus espaços com estilo e calma.</p>
-            <button class="primary-button" id="scrollProductsBtn">Ver coleção</button>
+            <p>
+              Peças funcionais e minimalistas para transformar seus espaços com estilo e calma.
+            </p>
+            <button id="btnVerColecao" class="btn-primary" type="button">Ver coleção</button>
           </div>
 
-          <div class="hero-image-wrap">
+          <div class="hero-media">
             <img
-              src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+              src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80"
               alt="Ambiente decorado"
-              class="hero-image"
             />
           </div>
         </section>
 
-        <section class="benefits-bar">
-          <div class="benefit-item"><span class="benefit-icon">🤍</span><strong>Estilo minimalista</strong></div>
-          <div class="benefit-item"><span class="benefit-icon">✔</span><strong>Ideal para espaços pequenos</strong></div>
-          <div class="benefit-item"><span class="benefit-icon">🛍</span><strong>Compra segura</strong></div>
+        <section class="benefits">
+          <div class="benefit-card">
+            <span class="benefit-icon">🤍</span>
+            <span>Estilo minimalista</span>
+          </div>
+          <div class="benefit-card">
+            <span class="benefit-icon">✔</span>
+            <span>Ideal para espaços pequenos</span>
+          </div>
+          <div class="benefit-card">
+            <span class="benefit-icon">🛍</span>
+            <span>Compra segura</span>
+          </div>
         </section>
 
-        <section class="section-intro" id="productsSection">
+        <section id="secaoProdutos" class="section-heading">
           <h2>Nossos Produtos</h2>
         </section>
 
-        <section class="product-grid" id="homeProductGrid"></section>
+        <section id="productGrid" class="product-grid"></section>
 
-        <section class="trust-block">
+        <section class="statement-block">
           <h2>Criamos peças que trazem calma, organização e beleza para o seu dia a dia.</h2>
-          <div class="trust-rating">★★★★★ <span>Mais de 500 clientes satisfeitos</span></div>
+          <div class="statement-rating">
+            <span>★★★★★</span>
+            <p>Mais de 500 clientes satisfeitos</p>
+          </div>
         </section>
 
-        <section class="featured-grid" id="featuredProductGrid"></section>
+        <section id="featuredGrid" class="featured-grid"></section>
       </div>
     </section>
 
+    <!-- DETALHE -->
     <section id="detailView" class="view">
       <div class="container">
         <nav class="breadcrumb">
-          <button id="backHomeBtn" class="text-link">Home</button>
+          <button id="btnVoltarHome" class="breadcrumb-link" type="button">Home</button>
           <span>›</span>
           <span>Organizamos</span>
           <span>›</span>
-          <span id="breadcrumbName">Produto</span>
+          <span id="breadcrumbProductName">Produto</span>
         </nav>
 
-        <section class="detail-top">
-          <div class="detail-gallery">
-            <div class="detail-main-image-wrap">
-              <img id="detailMainImage" class="detail-main-image" src="" alt="" />
-            </div>
+        <section class="product-detail-top">
+          <div class="product-detail-image-box">
+            <img id="detailMainImage" src="" alt="" class="product-detail-main-image" />
           </div>
 
-          <div class="detail-summary">
+          <div class="product-detail-info">
             <p id="detailCategory" class="detail-category"></p>
             <h1 id="detailTitle" class="detail-title"></h1>
             <div id="detailRating" class="detail-rating"></div>
             <p id="detailPrice" class="detail-price"></p>
 
-            <div class="qty-box">
-              <button type="button" id="qtyMinus" class="qty-btn">−</button>
+            <div class="qty-control">
+              <button id="qtyMinus" type="button" class="qty-btn">−</button>
               <span id="qtyValue">1</span>
-              <button type="button" id="qtyPlus" class="qty-btn">+</button>
+              <button id="qtyPlus" type="button" class="qty-btn">+</button>
             </div>
 
-            <a id="detailBuyBtn" class="primary-button buy-full" href="#" target="_self" rel="noopener">Comprar agora</a>
+            <a id="detailBuyBtn" href="#" class="btn-primary btn-buy" target="_self" rel="noopener">
+              Comprar agora
+            </a>
 
             <div class="detail-benefits">
               <div>🚚 Envio rápido</div>
@@ -101,19 +116,21 @@
 
         <section class="detail-section">
           <h2>Descrição</h2>
-          <div class="detail-description-grid">
-            <div>
+
+          <div class="detail-description-layout">
+            <div class="detail-description-text">
               <p id="detailDescription"></p>
             </div>
-            <div class="detail-secondary-image-wrap">
-              <img id="detailSecondaryImage" class="detail-secondary-image" src="" alt="" />
+
+            <div class="detail-description-image-box">
+              <img id="detailSecondaryImage" src="" alt="" class="detail-secondary-image" />
             </div>
           </div>
         </section>
 
         <section class="detail-section">
           <h2>Você também pode gostar</h2>
-          <div class="related-grid" id="relatedProductGrid"></div>
+          <div id="relatedGrid" class="related-grid"></div>
         </section>
       </div>
     </section>
