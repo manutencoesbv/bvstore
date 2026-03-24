@@ -92,11 +92,11 @@ let quantity = 1;
 const homeView = document.getElementById('homeView');
 const detailView = document.getElementById('detailView');
 
-const homeProductGrid = document.getElementById('homeProductGrid');
-const featuredProductGrid = document.getElementById('featuredProductGrid');
-const relatedProductGrid = document.getElementById('relatedProductGrid');
+const productGrid = document.getElementById('productGrid');
+const featuredGrid = document.getElementById('featuredGrid');
+const relatedGrid = document.getElementById('relatedGrid');
 
-const breadcrumbName = document.getElementById('breadcrumbName');
+const breadcrumbProductName = document.getElementById('breadcrumbProductName');
 const detailCategory = document.getElementById('detailCategory');
 const detailTitle = document.getElementById('detailTitle');
 const detailRating = document.getElementById('detailRating');
@@ -110,8 +110,8 @@ const qtyValue = document.getElementById('qtyValue');
 const qtyMinus = document.getElementById('qtyMinus');
 const qtyPlus = document.getElementById('qtyPlus');
 
-const backHomeBtn = document.getElementById('backHomeBtn');
-const scrollProductsBtn = document.getElementById('scrollProductsBtn');
+const btnVoltarHome = document.getElementById('btnVoltarHome');
+const btnVerColecao = document.getElementById('btnVerColecao');
 
 function formatPrice(value, currency = 'USD') {
   return new Intl.NumberFormat('pt-BR', {
@@ -123,7 +123,7 @@ function formatPrice(value, currency = 'USD') {
 function buildCard(product, className = 'product-card') {
   return `
     <article class="${className}" data-id="${product.id}">
-      <img src="${product.images[0]}" alt="${product.name}">
+      <img src="${product.images[0]}" alt="${product.name}" />
       <div class="card-body">
         <h3>${product.name}</h3>
         <p class="card-price">${formatPrice(product.price, product.currency)}</p>
@@ -135,12 +135,12 @@ function buildCard(product, className = 'product-card') {
 }
 
 function renderHome() {
-  homeProductGrid.innerHTML = products
+  productGrid.innerHTML = products
     .slice(0, 3)
     .map(product => buildCard(product, 'product-card'))
     .join('');
 
-  featuredProductGrid.innerHTML = products
+  featuredGrid.innerHTML = products
     .slice(0, 2)
     .map(product => buildCard(product, 'featured-card'))
     .join('');
@@ -149,11 +149,11 @@ function renderHome() {
 }
 
 function renderRelated() {
-  const related = products
-    .filter(item => item.id !== selectedProduct.id)
+  const relatedProducts = products
+    .filter(product => product.id !== selectedProduct.id)
     .slice(0, 3);
 
-  relatedProductGrid.innerHTML = related
+  relatedGrid.innerHTML = relatedProducts
     .map(product => buildCard(product, 'related-card'))
     .join('');
 
@@ -161,72 +161,72 @@ function renderRelated() {
 }
 
 function renderDetail() {
-  breadcrumbName.textContent = selectedProduct.name;
+  breadcrumbProductName.textContent = selectedProduct.name;
   detailCategory.textContent = selectedProduct.category;
   detailTitle.textContent = selectedProduct.name;
-
-  detailRating.textContent =
-    `★★★★★ ${selectedProduct.rating} · ${selectedProduct.reviewCount} avaliações`;
-
-  detailPrice.textContent =
-    formatPrice(selectedProduct.price, selectedProduct.currency);
-
+  detailRating.textContent = `★★★★★ ${selectedProduct.rating} · ${selectedProduct.reviewCount} avaliações`;
+  detailPrice.textContent = formatPrice(selectedProduct.price, selectedProduct.currency);
   detailDescription.textContent = selectedProduct.fullDescription;
 
   detailMainImage.src = selectedProduct.images[0];
-  detailSecondaryImage.src =
-    selectedProduct.images[1] || selectedProduct.images[0];
+  detailMainImage.alt = selectedProduct.name;
+
+  detailSecondaryImage.src = selectedProduct.images[1] || selectedProduct.images[0];
+  detailSecondaryImage.alt = `${selectedProduct.name} detalhe`;
 
   detailBuyBtn.href = selectedProduct.stripeLink;
-
   qtyValue.textContent = quantity;
 
   renderRelated();
+}
+
+function openDetail(productId) {
+  const product = products.find(item => item.id === productId);
+  if (!product) return;
+
+  selectedProduct = product;
+  quantity = 1;
+
+  renderDetail();
+
+  homeView.classList.remove('active');
+  detailView.classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function attachCardEvents() {
   document.querySelectorAll('[data-id]').forEach(card => {
     card.addEventListener('click', () => {
       const productId = Number(card.dataset.id);
-      const product = products.find(item => item.id === productId);
-
-      if (!product) return;
-
-      selectedProduct = product;
-      quantity = 1;
-
-      renderDetail();
-
-      homeView.classList.remove('active');
-      detailView.classList.add('active');
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      openDetail(productId);
     });
   });
 }
 
 qtyMinus.addEventListener('click', () => {
   if (quantity > 1) {
-    quantity--;
+    quantity -= 1;
     qtyValue.textContent = quantity;
   }
 });
 
 qtyPlus.addEventListener('click', () => {
-  quantity++;
+  quantity += 1;
   qtyValue.textContent = quantity;
 });
 
-backHomeBtn.addEventListener('click', () => {
+btnVoltarHome.addEventListener('click', () => {
   detailView.classList.remove('active');
   homeView.classList.add('active');
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-scrollProductsBtn.addEventListener('click', () => {
-  document.getElementById('productsSection')
-    ?.scrollIntoView({ behavior: 'smooth' });
+btnVerColecao.addEventListener('click', () => {
+  const section = document.getElementById('secaoProdutos');
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
 });
 
 renderHome();
