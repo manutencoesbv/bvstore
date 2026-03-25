@@ -3,19 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BV Store</title>
+  <title>BV Store - Lar & Deco</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#" class="brand" aria-label="BV Store">
+      <button class="brand brand-button" id="goHomeBtn" type="button" aria-label="Voltar para a home">
         <img src="Logo3.png" alt="BV Store" class="brand-logo" />
-      </a>
+        <div class="brand-text">
+          <span class="brand-title">BV Store</span>
+          <span class="brand-subtitle">Lar &amp; Deco</span>
+        </div>
+      </button>
 
       <div class="header-actions">
         <button class="icon-btn" type="button" aria-label="Buscar">⌕</button>
-        <button class="icon-btn" type="button" aria-label="Carrinho">🛒</button>
+        <button class="icon-btn cart-btn" type="button" id="openCartBtn" aria-label="Carrinho">
+          🛒
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
       </div>
     </div>
   </header>
@@ -24,117 +31,175 @@
     <!-- HOME -->
     <section id="homeView" class="view active">
       <div class="container">
-        <section class="hero">
-          <div class="hero-copy">
-            <h1>Seu lar, mais leve, organizado e acolhedor</h1>
-            <p>
-              Peças funcionais e minimalistas para transformar seus espaços com estilo e calma.
-            </p>
-            <button id="btnVerColecao" class="btn-primary" type="button">Ver coleção</button>
-          </div>
-
-          <div class="hero-media">
-            <img
-              src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80"
-              alt="Ambiente decorado"
-            />
+        <section class="hero-section">
+          <div class="hero-overlay">
+            <div class="hero-copy">
+              <h1>Seu lar, mais leve, organizado e acolhedor</h1>
+              <p>Peças funcionais e minimalistas para transformar seus espaços com estilo e calma.</p>
+              <button class="btn-primary" id="scrollToCategoriesBtn" type="button">Ver coleção</button>
+            </div>
           </div>
         </section>
 
-        <section class="benefits">
-          <div class="benefit-card">
+        <section class="hero-benefits">
+          <div class="benefit-item">
             <span class="benefit-icon">🤍</span>
             <span>Estilo minimalista</span>
           </div>
-          <div class="benefit-card">
+          <div class="benefit-item">
             <span class="benefit-icon">✔</span>
             <span>Ideal para espaços pequenos</span>
           </div>
-          <div class="benefit-card">
+          <div class="benefit-item">
             <span class="benefit-icon">🛍</span>
             <span>Compra segura</span>
           </div>
         </section>
 
-        <section id="secaoProdutos" class="section-heading">
-          <h2>Nossos Produtos</h2>
-        </section>
-
-        <section id="productGrid" class="product-grid"></section>
-
-        <section class="statement-block">
-          <h2>Criamos peças que trazem calma, organização e beleza para o seu dia a dia.</h2>
-          <div class="statement-rating">
-            <span>★★★★★</span>
-            <p>Mais de 500 clientes satisfeitos</p>
+        <section class="section-block" id="categoriesSection">
+          <div class="section-heading">
+            <h2>Nossos Produtos</h2>
           </div>
+          <div class="category-grid" id="categoryGrid"></div>
         </section>
 
-        <section id="featuredGrid" class="featured-grid"></section>
+        <section class="section-block">
+          <div class="section-heading">
+            <h2>EXCLUSIVOS</h2>
+          </div>
+          <div class="product-grid exclusive-grid" id="exclusiveGrid"></div>
+        </section>
       </div>
     </section>
 
-    <!-- DETALHE -->
-    <section id="detailView" class="view">
+    <!-- CATEGORY -->
+    <section id="categoryView" class="view">
       <div class="container">
         <nav class="breadcrumb">
-          <button id="btnVoltarHome" class="breadcrumb-link" type="button">Home</button>
+          <button class="breadcrumb-link" id="backFromCategoryBtn" type="button">Home</button>
           <span>›</span>
-          <span>Organizamos</span>
-          <span>›</span>
-          <span id="breadcrumbProductName">Produto</span>
+          <span id="categoryBreadcrumbName">Categoria</span>
         </nav>
 
-        <section class="product-detail-top">
-          <div class="product-detail-image-box">
-            <img id="detailMainImage" src="" alt="" class="product-detail-main-image" />
+        <section class="section-block">
+          <div class="section-heading section-heading-left">
+            <h2 id="categoryTitle">Categoria</h2>
+            <p id="categoryDescription" class="section-subtitle"></p>
           </div>
 
-          <div class="product-detail-info">
-            <p id="detailCategory" class="detail-category"></p>
-            <h1 id="detailTitle" class="detail-title"></h1>
-            <div id="detailRating" class="detail-rating"></div>
-            <p id="detailPrice" class="detail-price"></p>
+          <div class="product-grid" id="categoryProductGrid"></div>
+        </section>
+      </div>
+    </section>
 
-            <div class="qty-control">
-              <button id="qtyMinus" type="button" class="qty-btn">−</button>
-              <span id="qtyValue">1</span>
-              <button id="qtyPlus" type="button" class="qty-btn">+</button>
-            </div>
+    <!-- PRODUCT DETAIL -->
+    <section id="productView" class="view">
+      <div class="container">
+        <nav class="breadcrumb">
+          <button class="breadcrumb-link" id="backFromProductBtn" type="button">Voltar</button>
+          <span>›</span>
+          <span id="productBreadcrumbCategory">Categoria</span>
+          <span>›</span>
+          <span id="productBreadcrumbName">Produto</span>
+        </nav>
 
-            <a id="detailBuyBtn" href="#" class="btn-primary btn-buy" target="_self" rel="noopener">
-              Comprar agora
-            </a>
+        <section class="product-detail">
+          <div class="product-gallery">
+            <img id="productMainImage" class="product-main-image" src="" alt="" />
+          </div>
 
-            <div class="detail-benefits">
-              <div>🚚 Envio rápido</div>
-              <div>✔ Compra segura</div>
-              <div>↺ Garantia de devolução</div>
+          <div class="product-info">
+            <p id="productCategoryLabel" class="product-category-label"></p>
+            <h1 id="productTitle" class="product-title"></h1>
+            <div id="productRating" class="product-rating"></div>
+            <p id="productPrice" class="product-price"></p>
+            <p id="productDescription" class="product-description"></p>
+
+            <div class="product-actions">
+              <button id="addToCartBtn" class="btn-secondary" type="button">Adicionar ao carrinho</button>
+              <a id="buyNowBtn" class="btn-primary" href="#" target="_self" rel="noopener">Comprar agora</a>
             </div>
           </div>
         </section>
 
-        <section class="detail-section">
-          <h2>Descrição</h2>
-
-          <div class="detail-description-layout">
-            <div class="detail-description-text">
-              <p id="detailDescription"></p>
-            </div>
-
-            <div class="detail-description-image-box">
-              <img id="detailSecondaryImage" src="" alt="" class="detail-secondary-image" />
-            </div>
+        <section class="section-block">
+          <div class="section-heading section-heading-left">
+            <h2>Você também pode gostar</h2>
           </div>
+          <div class="product-grid" id="relatedGrid"></div>
         </section>
+      </div>
+    </section>
 
-        <section class="detail-section">
-          <h2>Você também pode gostar</h2>
-          <div id="relatedGrid" class="related-grid"></div>
+    <!-- CART -->
+    <section id="cartView" class="view">
+      <div class="container">
+        <nav class="breadcrumb">
+          <button class="breadcrumb-link" id="backFromCartBtn" type="button">Voltar</button>
+          <span>›</span>
+          <span>Carrinho</span>
+        </nav>
+
+        <section class="section-block">
+          <div class="section-heading section-heading-left">
+            <h2>Seu carrinho</h2>
+            <p class="section-subtitle">Revise seus produtos antes de finalizar a compra.</p>
+          </div>
+
+          <div class="cart-layout">
+            <div id="cartItems" class="cart-items"></div>
+
+            <aside class="cart-summary">
+              <h3>Resumo do pedido</h3>
+              <div class="summary-row">
+                <span>Itens</span>
+                <strong id="summaryItemsCount">0</strong>
+              </div>
+              <div class="summary-row total">
+                <span>Total</span>
+                <strong id="summaryTotal">R$ 0,00</strong>
+              </div>
+
+              <button id="checkoutCartBtn" class="btn-primary btn-full" type="button">Comprar carrinho</button>
+            </aside>
+          </div>
         </section>
       </div>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h3>BV Store - Lar &amp; Deco</h3>
+        <p>Decoração minimalista, funcional e acolhedora para transformar a sua casa.</p>
+      </div>
+
+      <div>
+        <h4>Contato</h4>
+        <p>Email: contato@bvstore.com</p>
+        <p>WhatsApp: +55 48 99999-9999</p>
+        <p>Instagram: @bvstore</p>
+      </div>
+
+      <div>
+        <h4>Atendimento</h4>
+        <p>Seg a Sex: 9:00 às 18:00</p>
+        <p>Sábado: 9:00 às 13:00</p>
+      </div>
+
+      <div>
+        <h4>Informações</h4>
+        <p>Política de privacidade</p>
+        <p>Trocas e devoluções</p>
+        <p>Termos e condições</p>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© 2026 BV Store - Lar &amp; Deco. Todos os direitos reservados.</p>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
